@@ -1,3 +1,4 @@
+colorama
 pynput
 numpy >= 1.18.2
 tensorflow >= 2.2.0
