@@ -58,11 +58,16 @@ def on_press(key):
         TEXT.append(CHOSEN_OPTION)
         INPUT = ''
 
-    elif key == Key.tab:
+    elif key == Key.tab or key == Key.down:
         if CHOSEN_OPTION_ID < CHOSEN_OPTION_SIZE - 1:
             CHOSEN_OPTION_ID += 1
         else:
             CHOSEN_OPTION_ID = 0
+    elif key == Key.up:
+        if CHOSEN_OPTION_ID > 0:
+            CHOSEN_OPTION_ID -= 1
+        else:
+            CHOSEN_OPTION_ID = CHOSEN_OPTION_SIZE - 1
     elif key == Key.space:
         TEXT.append(INPUT)
         INPUT = ''
