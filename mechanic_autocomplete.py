@@ -24,53 +24,51 @@ def find_word(char):
     return [k for k, _ in count_poss[:4]]
 
 
+def print_lines(to_print):
+    sys.stdout.write("\033[8F")
+
+    print('     ' * 10)
+    print('     ' * 10)
+    print('------------------------------------------------')
+
+    for _ in range(5 - len(to_print)):
+        print('     ' * 10)
+
+    for i in to_print:
+        print(i, '     ' * 10)
+
+
 INPUT = ''
-TEXT = ''
+TEXT = []
 CHOSEN_OPTION_ID = 0
 CHOSEN_OPTION = ''
 CHOSEN_OPTION_SIZE = 0
-
-
-def print_lines(to_print):
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-    sys.stdout.write("\033[F")
-
-    print('     ' * 6)
-    print('     ' * 6)
-    print('-----------------------------------------------------')
-
-    for _ in range(5 - len(to_print)):
-        print('     ' * 12)
-
-    for i in to_print:
-        print(i, '     ' * 11)
 
 
 def on_press(key):
     global INPUT, TEXT, CHOSEN_OPTION, CHOSEN_OPTION_ID, CHOSEN_OPTION_SIZE
 
     if key == Key.backspace:
-        INPUT = INPUT[0: -1]
+        if len(INPUT) == 0:
+            TEXT = TEXT[:-1]
+        else:
+            INPUT = INPUT[0: -1]
         print()
-    elif key == Key.space:
-        TEXT = TEXT + ' ' + INPUT
+    elif key == Key.enter:
+        TEXT.append(CHOSEN_OPTION)
         INPUT = ''
+
     elif key == Key.tab:
         if CHOSEN_OPTION_ID < CHOSEN_OPTION_SIZE - 1:
             CHOSEN_OPTION_ID += 1
         else:
             CHOSEN_OPTION_ID = 0
-    elif key == Key.enter:
-        INPUT = CHOSEN_OPTION
-
+    elif key == Key.space:
+        TEXT.append(INPUT)
+        INPUT = ''
     else:
-        INPUT = INPUT + key.char
+        if hasattr(key, 'char'):
+            INPUT = INPUT + key.char
 
     to_print = []
 
@@ -88,7 +86,7 @@ def on_press(key):
         else:
             to_print.append(el)
 
-    to_print.append('input: ' + INPUT + '           text: ' + TEXT)
+    to_print.append('input: ' + ' '.join(TEXT) + ' ' + INPUT)
     print_lines(to_print)
 
 
