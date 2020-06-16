@@ -6,13 +6,11 @@ import numpy as np
 from colorama import Fore, Style
 from pynput.keyboard import Key, Listener
 
-from mechanic_processing import MechanicProcessing
+from ai_processing import AIProcessing
 
 data_file = open('data1.txt')
 
-marcov = MechanicProcessing()
-
-marcov.add_document(open('data1.txt').read())
+ai = AIProcessing()
 
 data_list = [line.strip().split() for line in data_file]
 
@@ -57,7 +55,8 @@ NEW_WORD = False
 
 
 def on_press(key):
-    global NEW_WORD, INPUT, TEXT, CHOSEN_OPTION, CHOSEN_OPTION_ID, CHOSEN_OPTION_SIZE
+    global NEW_WORD, INPUT, TEXT, CHOSEN_OPTION
+    global CHOSEN_OPTION_ID, CHOSEN_OPTION_SIZE
 
     if key == Key.backspace:
         if len(INPUT) == 0:
@@ -93,10 +92,12 @@ def on_press(key):
 
     to_print = []
     if NEW_WORD:
-        words_found = [i[0] for i in marcov.predict(' '.join(TEXT))]
+        if len(TEXT) != 0:
+            words_found = ai.predict(TEXT[-1])
+        else:
+            words_found = find_word('')
         if len(words_found) == 0:
             words_found = find_word('')
-
     else:
         words_found = find_word(INPUT)
 
